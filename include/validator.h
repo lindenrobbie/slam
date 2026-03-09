@@ -10,5 +10,6 @@ typedef struct {
 } ValidationResult;
 
 ValidationResult validate_sample(const char *filename, const Config *config);
+void analyze_samples_folder(const Config *config);
 
 #endif

@@ -56,6 +56,7 @@ int main()
 
         if (strcmp(command, "exit") == 0)
         {
+            printf("Exiting...\n");
             running = false;
         }
         else if (strcmp(command, "help") == 0)
