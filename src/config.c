@@ -17,23 +17,7 @@ void parse_config_line(char *line, Config *config)
     char *key = line;
     char *value = equals_position + 1;
 
-    if (strcmp(key, "LABEL") == 0)
-    {
-        strncpy(config->label, value, sizeof(config->label) - 1);
-    }
-    else if (strcmp(key, "ARTIST") == 0)
-    {
-        strncpy(config->artist, value, sizeof(config->artist) - 1);
-    }
-    else if (strcmp(key, "BPM_MIN") == 0)
-    {
-        sscanf(value, "%d", &config->bpm_min);
-    }
-    else if (strcmp(key, "BPM_MAX") == 0)
-    {
-        sscanf(value, "%d", &config->bpm_max);
-    }
-    else if (strcmp(key, "SAMPLE_RATE") == 0)
+    if (strcmp(key, "SAMPLE_RATE") == 0)
     {
         sscanf(value, "%d", &config->sample_rate);
     }

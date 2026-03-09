@@ -2,10 +2,6 @@
 #define CONFIG_H
 
 typedef struct {
-    char label[32];
-    char artist[32];
-    int bpm_min;
-    int bpm_max;
     int sample_rate;
     int bit_depth;
 } Config;

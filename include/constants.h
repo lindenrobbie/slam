@@ -10,6 +10,7 @@
 #define MAX_COMMAND_LENGTH 50
 #define MAX_PATH_LENGTH 256
 #define MAX_CONFIG_LINE_LENGTH 256
+#define MAX_ERROR_MSG_LENGTH 256
 
 //Colors to make CLI less insufferable to read:
 #define COLOR_RESET   "\033[0m"
@@ -19,10 +20,6 @@
 #define COLOR_YELLOW  "\033[0;33m"
 
 //Default config values:
-#define DEFAULT_LABEL "LABEL"
-#define DEFAULT_ARTIST "ARTIST"
-#define DEFAULT_BPM_MIN 40
-#define DEFAULT_BPM_MAX 200
 #define DEFAULT_SAMPLE_RATE 44100
 #define DEFAULT_BIT_DEPTH 24
 
