@@ -82,29 +82,54 @@ int read_wav_info(const char *filename, WavInfo *info)
         return -1;
     }
 
+    // 2.3 Skip extra bytes in fmt chunk if it's bigger than 16
+    if (fmt_chunk.chunk_size > 16)
+    {
+        fseek(wav_file, fmt_chunk.chunk_size - 16, SEEK_CUR);
+    }
+
     /*===================*/
     /*   3. Read data    */
     /*===================*/
 
-    DataChunk data_chunk;
+   char chunk_id[4];
+    uint32_t chunk_size;
+    int data_found = 0;
 
-    // 3.1 Error: Can't read data chunk header (file corrupted)
-    if (fread(&data_chunk, sizeof(DataChunk), 1, wav_file) != 1)
+    // Keep reading chunks until we find "data"
+    while (data_found == 0)
     {
-        fclose(wav_file);
-        return -1;
+        // Read chunk ID
+        if (fread(chunk_id, 4, 1, wav_file) != 1)
+        {
+            fclose(wav_file);
+            return -1;
+        }
+
+        // Read chunk size
+        if (fread(&chunk_size, 4, 1, wav_file) != 1)
+        {
+            fclose(wav_file);
+            return -1;
+        }
+
+        // Check if this is the data chunk
+        if (strncmp(chunk_id, "data", 4) == 0)
+        {
+            // Found it!
+            data_found = 1;
+            info->sample_rate = fmt_chunk.sample_rate;
+            info->bit_depth = fmt_chunk.bit_depth;
+            info->num_channels = fmt_chunk.num_channels;
+            info->data_size = chunk_size;
+        }
+        else
+        {
+            // Not the data chunk, skip it
+            fseek(wav_file, chunk_size, SEEK_CUR);
+        }
     }
 
-    /*===================*/
-    /*   4. SUCCESS      */
-    /*===================*/
-
-    info->sample_rate = fmt_chunk.sample_rate;
-    info->bit_depth = fmt_chunk.bit_depth;
-    info->num_channels = fmt_chunk.num_channels;
-    info->data_size = data_chunk.data_size;
-
     fclose(wav_file);
-
     return 0;
 }
