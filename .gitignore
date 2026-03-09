@@ -1,0 +1,18 @@
+# Compiled binaries
+slam
+*.o
+*.out
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files (optional)
+test_samples/
