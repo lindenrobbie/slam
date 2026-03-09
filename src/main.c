@@ -2,8 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "../include/utils.h"
-
-#define MAX_COMMAND_LENGTH 50
+#include "../include/constants.h"
 
 int main()
 {
@@ -11,8 +10,8 @@ int main()
     bool running = true;
     char command[MAX_COMMAND_LENGTH];
 
-    printf("\nSLAM v1.0\n");
-    printf("Made by Robbie Linden 2026\n\n");
+    printf("\nSLAM v%s\n", SLAM_VERSION);
+    printf("Made by %s %s\n\n", SLAM_AUTHOR, SLAM_YEAR);
     printf("Enter a command or type 'help' to see commands.\n\n");
 
     while (running == true)
