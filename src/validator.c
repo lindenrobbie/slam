@@ -3,6 +3,12 @@
 #include "../include/validator.h"
 #include "../include/wav_reader.h"
 
+#ifdef _WIN32
+    #include "../include/dirent_windows.h"
+#else
+    #include <dirent.h>
+#endif
+
 ValidationResult validate_sample(const char *filename, const Config *config)
 {
     ValidationResult result;
@@ -48,4 +54,56 @@ ValidationResult validate_sample(const char *filename, const Config *config)
 
     // 4. success woohoo
     return result;
+}
+
+void analyze_samples_folder(const Config *config)
+{
+    printf("\nAnalyzing samples in './samples' folder...\n\n");
+
+    DIR *dir = opendir("samples");
+    if (dir == NULL)
+    {
+        printf("Error: Could not open samples folder\n\n");
+        return;
+    }
+
+    int passed = 0;
+    int failed = 0;
+    struct dirent *entry;
+    char filepath[MAX_PATH_LENGTH];
+
+    while ((entry = readdir(dir)) != NULL)
+    {
+    // Skip . and ..
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+        {
+            continue;
+        }
+
+        // Build full path
+        snprintf(filepath, sizeof(filepath), "samples/%s", entry->d_name);
+
+        // Validate the sample
+        ValidationResult result = validate_sample(filepath, config);
+
+        if (result.is_valid)
+        {
+        printf(COLOR_GREEN "[PASS]" COLOR_RESET " %s\n", entry->d_name);
+        passed++;
+        }
+
+        else
+        {
+        printf(COLOR_RED "[FAIL]" COLOR_RESET " %s\n", entry->d_name);
+        printf("       Error: %s\n", result.error_msg);
+        failed++;
+        }
+
+    }
+
+    closedir(dir);
+
+    printf("\n----------------------------------------\n");
+    printf("Summary: %d passed, %d failed\n", passed, failed);
+    printf("----------------------------------------\n\n");
 }
