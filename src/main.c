@@ -45,6 +45,17 @@ int main()
         print_prompt();
 
         fgets(command, MAX_COMMAND_LENGTH, stdin);
+
+        if (strchr(command, '\n') == NULL)
+        {
+            printf("Error: Command too long\n\n");
+
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF);
+
+            continue;
+        }
+
         command[strcspn(command, "\n")] = '\0';
 
         if (strlen(command) == 0)
