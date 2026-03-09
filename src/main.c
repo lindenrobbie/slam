@@ -4,6 +4,7 @@
 #include "../include/utils.h"
 #include "../include/constants.h"
 #include "../include/config.h"
+#include "../include/validator.h"
 
 void show_welcome(void)
 {
@@ -17,7 +18,7 @@ void show_help(void)
     printf("\nAvailable commands:\n");
     printf("help    - Show this help message\n");
     printf("info    - Show program information\n");
-    printf("analyze - Analyze samples in a folder\n");
+    printf("analyze - Analyze WAV files in input folder\n");
     printf("exit    - Quit the program\n\n");
 }
 
@@ -35,10 +36,6 @@ int main()
     if (load_config("slam.conf", &config) != 0)
     {
         printf("Warning: Could not load slam.conf, using defaults.\n\n");
-        strcpy(config.label, DEFAULT_LABEL);
-        strcpy(config.artist, DEFAULT_ARTIST);
-        config.bpm_min = DEFAULT_BPM_MIN;
-        config.bpm_max = DEFAULT_BPM_MAX;
         config.sample_rate = DEFAULT_SAMPLE_RATE;
         config.bit_depth = DEFAULT_BIT_DEPTH;
     }
@@ -71,6 +68,10 @@ int main()
             printf("Author: %s\n", SLAM_AUTHOR);
             print_config(&config);
         }
+        else if (strcmp(command, "analyze") == 0)
+        {
+            analyze_samples_folder(&config);
+        }
 
         // end of available commands
 
@@ -81,4 +82,5 @@ int main()
     }
 
     return 0;
+
 }

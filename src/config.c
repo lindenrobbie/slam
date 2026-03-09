@@ -61,9 +61,6 @@ int load_config(const char *filename, Config *config)
 void print_config(const Config *config)
 {
     printf("\nConfiguration:\n\n");
-    printf("Label: %s\n", config->label);
-    printf("Artist: %s\n", config->artist);
-    printf("BPM Range: %d - %d\n", config->bpm_min, config->bpm_max);
     printf("Sample Rate: %d Hz\n", config->sample_rate);
     printf("Bit Depth: %d bit\n\n", config->bit_depth);
 }
