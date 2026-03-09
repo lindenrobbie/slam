@@ -8,7 +8,7 @@
 
 //Input limits:
 #define MAX_COMMAND_LENGTH 50
-#define MAX_PATH_LENGTH 256
+#define MAX_PATH_LENGTH 512
 #define MAX_CONFIG_LINE_LENGTH 256
 #define MAX_ERROR_MSG_LENGTH 256
 
