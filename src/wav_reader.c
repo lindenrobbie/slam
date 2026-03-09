@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 #include "../include/wav_reader.h"
 
 //Wave file consists of 3 parts:
@@ -62,51 +63,75 @@ int read_wav_info(const char *filename, WavInfo *info)
         return -1;
     }
 
-    /*===================*/
-    /*  2. Read metadata */
-    /*===================*/
+    /*========================================*/
+    /*  Step 2: Search for fmt chunk         */
+    /*========================================*/
 
+    char chunk_id[4];
+    uint32_t chunk_size;
+    int fmt_found = false;
     FmtChunk fmt_chunk;
 
-    // 2.1 Error: Can't read format chunk (file corrupted)
-    if (fread(&fmt_chunk, sizeof(FmtChunk), 1, wav_file) != 1)
+    // WAV files can have chunks in any order, so we search for exactly "fmt "
+    while (fmt_found == false)
     {
-        fclose(wav_file);
-        return -1;
-    }
-
-    // 2.2 Error:  Format chunk is invalid (missing "fmt ")
-    if (strncmp(fmt_chunk.fmt, "fmt ", 4) != 0)
-    {
-        fclose(wav_file);
-        return -1;
-    }
-
-    // 2.3 Skip extra bytes in fmt chunk if it's bigger than 16
-    if (fmt_chunk.chunk_size > 16)
-    {
-        fseek(wav_file, fmt_chunk.chunk_size - 16, SEEK_CUR);
-    }
-
-    /*===================*/
-    /*   3. Read data    */
-    /*===================*/
-
-   char chunk_id[4];
-    uint32_t chunk_size;
-    int data_found = 0;
-
-    // Keep reading chunks until we find "data"
-    while (data_found == 0)
-    {
-        // Read chunk ID
+        // 2.1 Error: Can't read chunk ID (file corrupted)
         if (fread(chunk_id, 4, 1, wav_file) != 1)
         {
             fclose(wav_file);
             return -1;
         }
 
-        // Read chunk size
+        // 2.2 Error: Can't read chunk size (file corrupted)
+        if (fread(&chunk_size, 4, 1, wav_file) != 1)
+        {
+            fclose(wav_file);
+            return -1;
+        }
+
+        // Checks if this is the format chunk
+        if (strncmp(chunk_id, "fmt ", 4) == 0)
+        {
+            // Found it! Read the rest of the fmt data
+            fmt_found = true;
+
+            // 2.3 Error: Can't read format data (file corrupted)
+            if (fread(&fmt_chunk.audio_format, 16, 1, wav_file) != 1)
+            {
+                fclose(wav_file);
+                return -1;
+            }
+
+            // Some fmt chunks have extra data, skips it
+            if (chunk_size > 16)
+            {
+                fseek(wav_file, chunk_size - 16, SEEK_CUR);
+            }
+        }
+        else
+        {
+            // This isn't the fmt chunk, skip over it
+            fseek(wav_file, chunk_size, SEEK_CUR);
+        }
+    }
+
+    /*========================================*/
+    /*  Step 3: Search for data chunk        */
+    /*========================================*/
+
+    int data_found = false;
+
+    // Search for the "data" chunk
+    while (data_found == false)
+    {
+        // 3.1 Error: Can't read chunk ID (file corrupted)
+        if (fread(chunk_id, 4, 1, wav_file) != 1)
+        {
+            fclose(wav_file);
+            return -1;
+        }
+
+        // 3.2 Error: Can't read chunk size (file corrupted)
         if (fread(&chunk_size, 4, 1, wav_file) != 1)
         {
             fclose(wav_file);
@@ -116,8 +141,8 @@ int read_wav_info(const char *filename, WavInfo *info)
         // Check if this is the data chunk
         if (strncmp(chunk_id, "data", 4) == 0)
         {
-            // Found it!
-            data_found = 1;
+            // Found it! Extract the info we need
+            data_found = true;
             info->sample_rate = fmt_chunk.sample_rate;
             info->bit_depth = fmt_chunk.bit_depth;
             info->num_channels = fmt_chunk.num_channels;
@@ -132,4 +157,5 @@ int read_wav_info(const char *filename, WavInfo *info)
 
     fclose(wav_file);
     return 0;
+
 }
