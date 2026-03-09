@@ -1,13 +1,8 @@
 #include <stdio.h>
-#include <stdarg.h>
 #include "../include/utils.h"
+#include "../include/constants.h"
 
-void print_slam(const char *format, ...)
+void print_prompt(void)
 {
-    printf("[SLAM]");
-
-    va_list args;
-    va_start(args, format);
-    vprintf(format, args);
-    va_end(args);
+    printf("[" COLOR_ORANGE "SLAM" COLOR_RESET "]> ");
 }

@@ -9,5 +9,13 @@
 //Input limits:
 #define MAX_COMMAND_LENGTH 50
 #define MAX_PATH_LENGTH 256
+#define MAX_CONFIG_LINE_LENGTH 256
+
+//Colors to make CLI less insufferable to read:
+#define COLOR_RESET   "\033[0m"
+#define COLOR_ORANGE  "\033[38;5;208m"
+#define COLOR_RED     "\033[0;31m"
+#define COLOR_GREEN   "\033[0;32m"
+#define COLOR_YELLOW  "\033[0;33m"
 
 #endif
