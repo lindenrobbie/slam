@@ -45,3 +45,4 @@ BIT_DEPTH=24
 - GCC compiler (Linux/WSL or MinGW on Windows)
 - Standard C library
 - Works on both Linux and Windows
+- Uses dirent.h compatibility layer for Windows (https://github.com/tronkko/dirent)
