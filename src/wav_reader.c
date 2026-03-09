@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "../include/wav_reader.h"
+#include "../include/constants.h"
 
 //Wave file consists of 3 parts:
 
@@ -96,16 +97,16 @@ int read_wav_info(const char *filename, WavInfo *info)
             fmt_found = true;
 
             // 2.3 Error: Can't read format data (file corrupted)
-            if (fread(&fmt_chunk.audio_format, 16, 1, wav_file) != 1)
+            if (fread(&fmt_chunk.audio_format, FMT_CHUNK_DATA_SIZE, 1, wav_file) != 1)
             {
                 fclose(wav_file);
                 return -1;
             }
 
             // Some fmt chunks have extra data, skips it
-            if (chunk_size > 16)
+            if (chunk_size > FMT_CHUNK_DATA_SIZE)
             {
-                fseek(wav_file, chunk_size - 16, SEEK_CUR);
+                fseek(wav_file, chunk_size - FMT_CHUNK_DATA_SIZE, SEEK_CUR);
             }
         }
         else

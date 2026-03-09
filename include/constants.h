@@ -23,4 +23,7 @@
 #define DEFAULT_SAMPLE_RATE 44100
 #define DEFAULT_BIT_DEPTH 24
 
+// WAV file format constants:
+#define FMT_CHUNK_DATA_SIZE 16
+
 #endif
