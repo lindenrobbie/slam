@@ -18,4 +18,12 @@
 #define COLOR_GREEN   "\033[0;32m"
 #define COLOR_YELLOW  "\033[0;33m"
 
+//Default config values:
+#define DEFAULT_LABEL "LABEL"
+#define DEFAULT_ARTIST "ARTIST"
+#define DEFAULT_BPM_MIN 40
+#define DEFAULT_BPM_MAX 200
+#define DEFAULT_SAMPLE_RATE 44100
+#define DEFAULT_BIT_DEPTH 24
+
 #endif

@@ -32,12 +32,15 @@ int main()
 
     show_welcome();
 
-
-
     if (load_config("slam.conf", &config) != 0)
     {
-        printf("Warning: Could not load slam.conf, using defaults\n");
-        //set defaults here
+        printf("Warning: Could not load slam.conf, using defaults.\n\n");
+        strcpy(config.label, DEFAULT_LABEL);
+        strcpy(config.artist, DEFAULT_ARTIST);
+        config.bpm_min = DEFAULT_BPM_MIN;
+        config.bpm_max = DEFAULT_BPM_MAX;
+        config.sample_rate = DEFAULT_SAMPLE_RATE;
+        config.bit_depth = DEFAULT_BIT_DEPTH;
     }
 
     while (running == true)
@@ -52,7 +55,7 @@ int main()
             continue;
         }
 
-        //commands
+        // available commands
 
         if (strcmp(command, "exit") == 0)
         {
@@ -68,6 +71,9 @@ int main()
             printf("Author: %s\n", SLAM_AUTHOR);
             print_config(&config);
         }
+
+        // end of available commands
+
         else 
         {
             printf("Entered command is not a valid command, kindly enter 'help' to see valid commands.\n\n");
