@@ -56,6 +56,7 @@ Edit `slam.conf` to customize validation rules:
 ```
 SAMPLE_RATE=44100
 BIT_DEPTH=24
+SAMPLES_FOLDER=samples
 ```
 
 ## Requirements
