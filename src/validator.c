@@ -78,74 +78,141 @@ ValidationResult validate_sample(const char *filename, const Config *config)
 //                                               //
 //===============================================//
 
+// Helper function for sort, alphabetically sorts PASS and FAIL in their own list
+int compare_results(const void *a, const void *b)
+{
+    AnalysisResult *result_a = (AnalysisResult *)a;
+    AnalysisResult *result_b = (AnalysisResult *)b;
+
+    return strcmp(result_a->filename, result_b->filename);
+}
+
 void print_results_table(AnalysisResult *results, int result_count, int passed, int failed)
 {
-    // Table header
+    /*================================*/
+    /*       2.1 Sort results         */
+    /*================================*/
+
+    // Process 2.1.1: Separate PASS and FAIL results
+    AnalysisResult *pass_results = malloc(sizeof(AnalysisResult) * passed);
+    AnalysisResult *fail_results = malloc(sizeof(AnalysisResult) * failed);
+
+    int pass_idx = 0;
+    int fail_idx = 0;
+
+    for (int i = 0; i < result_count; i++)
+    {
+        if (results[i].is_valid)
+        {
+            pass_results[pass_idx++] = results[i];
+        }
+        else
+        {
+            fail_results[fail_idx++] = results[i];
+        }
+    }
+
+    // Process 2.1.2: Sort both lists alphabetically
+    qsort(pass_results, passed, sizeof(AnalysisResult), compare_results);
+    qsort(fail_results, failed, sizeof(AnalysisResult), compare_results);
+
+    /*================================*/
+    /*     2.2 Print table header     */
+    /*================================*/
+
     printf("%-25s %-10s %-15s %-12s %s\n",
            "File", "Status", "Sample Rate", "Bit Depth", "Error");
     printf("--------------------------------------------------------------------------------\n");
+        
+    /*================================*/
+    /*     2.3 Print FAIL results     */
+    /*================================*/
 
-    
-    for (int i = 0; i < result_count; i++)
+    for (int i = 0; i < failed; i++)
     {
         char sample_rate_str[MAX_FORMAT_STRING_LENGTH];
         char bit_depth_str[MAX_FORMAT_STRING_LENGTH];
 
-        /*=========================================*/
-        /*    2.1. Format data nicely preprint     */
-        /*=========================================*/
-
-        // Process 2.1.1: Format it as e.g "44100 Hz"
-        if (results[i].sample_rate > 0)
+        // Format sample rate
+        if (fail_results[i].sample_rate > 0)
         {
-            snprintf(sample_rate_str, sizeof(sample_rate_str), "%d Hz", results[i].sample_rate);
+            snprintf(sample_rate_str, sizeof(sample_rate_str), "%d Hz", fail_results[i].sample_rate);
         }
-        // Otherwise, format as "-" (e.g when file could not be read)
         else
         {
             strcpy(sample_rate_str, "-");
         }
-        // Process 2.1.2: Format bit depth (same as sample rate)
-        if (results[i].bit_depth > 0)
+
+        // Format bit depth
+        if (fail_results[i].bit_depth > 0)
         {
-            snprintf(bit_depth_str, sizeof(bit_depth_str), "%d bit", results[i].bit_depth);
+            snprintf(bit_depth_str, sizeof(bit_depth_str), "%d bit", fail_results[i].bit_depth);
         }
-        // Otherwise, format as "-" (e.g when file could not be)
         else
         {
             strcpy(bit_depth_str, "-");
         }
 
-        /*================================*/
-        /*    2.2. Print data finally     */
-        /*================================*/
-
-        // Process 2.2.1: Print PASS samples
-        if (results[i].is_valid)
-        {
-            printf("%-25s " COLOR_GREEN "%-10s" COLOR_RESET " %-15s %-12s %s\n",
-                   results[i].filename,
-                   "PASS",
-                   sample_rate_str,
-                   bit_depth_str,
-                   "-");
-        }
-        // Process 2.2.2: Print FAIL samples
-        else
-        {
-            printf("%-25s " COLOR_RED "%-10s" COLOR_RESET " %-15s %-12s %s\n",
-                   results[i].filename,
-                   "FAIL",
-                   sample_rate_str,
-                   bit_depth_str,
-                   results[i].error_msg);
-        }
+        printf("%-25s " COLOR_RED "%-10s" COLOR_RESET " %-15s %-12s %s\n",
+               fail_results[i].filename,
+               "FAIL",
+               sample_rate_str,
+               bit_depth_str,
+               fail_results[i].error_msg);
     }
 
-    // Process 2.2.3: Print table tail (Summary)
+    /*================================*/
+    /*     2.4 Print PASS results     */
+    /*================================*/
+
+    
+    for (int i = 0; i < passed; i++)
+    {
+        char sample_rate_str[MAX_FORMAT_STRING_LENGTH];
+        char bit_depth_str[MAX_FORMAT_STRING_LENGTH];
+
+        // Format sample rate
+        if (pass_results[i].sample_rate > 0)
+        {
+            snprintf(sample_rate_str, sizeof(sample_rate_str), "%d Hz", pass_results[i].sample_rate);
+        }
+        else
+        {
+            strcpy(sample_rate_str, "-");
+        }
+
+        // Format bit depth
+        if (pass_results[i].bit_depth > 0)
+        {
+            snprintf(bit_depth_str, sizeof(bit_depth_str), "%d bit", pass_results[i].bit_depth);
+        }
+        else
+        {
+            strcpy(bit_depth_str, "-");
+        }
+
+        printf("%-25s " COLOR_GREEN "%-10s" COLOR_RESET " %-15s %-12s %s\n",
+               pass_results[i].filename,
+               "PASS",
+               sample_rate_str,
+               bit_depth_str,
+               "-");
+    }
+       
+
+    /*================================*/
+    /*       2.5 Print summary        */
+    /*================================*/
     printf("--------------------------------------------------------------------------------\n");
     printf("Summary: %d passed, %d failed\n", passed, failed);
     printf("--------------------------------------------------------------------------------\n\n");
+
+    /*================================*/
+    /*          2.6 Clean up          */
+    /*================================*/
+
+    free(pass_results);
+    free(fail_results);
 
 }
 
