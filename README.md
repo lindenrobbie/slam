@@ -62,18 +62,30 @@ sample5.wav = 44100Hz / 24bit
 - Detect loop length if it bleeds over 1-2<sup>n</sup> bars
 - Trim detected bleeding loops
 - Import custom folder path
-- Have better code structure (?)
-- Make error handling more pro (stderr, actual return values) <- Done
-- Automated tests for future (?)
-- Have command arguments (?)
-- Have magic numbers & constants as enum (?)
-- Add debug level, make print processes (?) And error handle them if they fail (?)
+- Have command arguments (?) e.g ```normalize (folder)```
+
+
+
+## Possible improvements
+
+- Have better code structure:
+- - No hardcoded strings for commands (if/else)
+- Make error handling more pro (actual return values)
+- - Error codes into enum
+- - No hardcoded error messages (Make in separate file)
+- Unit tests
+- Have magic strings & constants as enum (?)
+- Add debug level, make print processes in real time & logging
+- Improve config validation
+- Check memory allocation
+- Learn CMake (?)
+- Make CI/CD (?)
 
 ## What I learned !
 
-- Header files and a make file
-- Structs and standards for a lot of things, wav files have 3 chunks
+- Header file creation and a make file creation
+- Structs and standards for a lot of things, e.g wav files have 3 chunks
 - Binary file reading and parsing (Not just CSV)
-- Not to overcomplicate and overmodulorize code (Like I kinda did)
+- Not to overcomplicate and overmodulorize code (Like I kinda did in this project)
 - Comments as much as this isn't normal (But it's to help the teacher and future me)
 - Compiling for windows sucks
