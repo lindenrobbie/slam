@@ -224,18 +224,18 @@ void print_results_table(AnalysisResult *results, int result_count, int passed, 
 
 void analyze_samples_folder(const Config *config)
 {
-    printf("\nAnalyzing samples in './samples' folder...\n\n");
+    printf("\nAnalyzing samples in './%s' folder...\n\n", config->samples_folder);
 
     /*======================*/
     /* 3.1. Open DIRECTORY  */
     /*======================*/
 
-    DIR *dir = opendir("samples");
+    DIR *dir = opendir(config->samples_folder);
 
     // Error 3.1 validator.c: Folder doesn't exist or can't be opened
     if (dir == NULL)
     {
-        printf("Error: Could not open samples folder\n\n");
+        printf("Error: Could not open %s folder\n\n", config->samples_folder);
         return;
     }
 
@@ -270,7 +270,7 @@ void analyze_samples_folder(const Config *config)
     /*    3.3 Validate each file      */
     /*================================*/
 
-    dir = opendir("samples");
+    dir = opendir(config->samples_folder);
     int result_count = 0;
     int passed = 0;
     int failed = 0;
@@ -285,7 +285,7 @@ void analyze_samples_folder(const Config *config)
         }
 
         // Process 3.3.2: Build file path
-        snprintf(filepath, sizeof(filepath), "samples/%s", entry->d_name);
+        snprintf(filepath, sizeof(filepath), "%s/%s", config->samples_folder, entry->d_name);
 
         // Process 3.3.3: Read WAV file info
         WavInfo wav_info;

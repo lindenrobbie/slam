@@ -35,6 +35,11 @@ void parse_config_line(char *line, Config *config)
     {
         sscanf(value, "%d", &config->bit_depth);
     }
+    // Process 1.5: Check for "SAMPLES_FOLDER"
+    else if (strncmp(line, "SAMPLES_FOLDER=", 15) == 0)
+    {
+    strcpy(config->samples_folder, line + 15);
+    }
 
 }
 
@@ -95,4 +100,5 @@ void print_config(const Config *config)
     printf("\nConfiguration:\n\n");
     printf("Sample Rate: %d Hz\n", config->sample_rate);
     printf("Bit Depth: %d bit\n\n", config->bit_depth);
+    printf("Samples Folder: %s\n\n", config->samples_folder);
 }

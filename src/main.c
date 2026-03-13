@@ -59,6 +59,7 @@ int main()
         printf("Warning: Could not load slam.conf, using defaults.\n\n");
         config.sample_rate = DEFAULT_SAMPLE_RATE;
         config.bit_depth = DEFAULT_BIT_DEPTH;
+        strcpy(config.samples_folder, DEFAULT_SAMPLES_FOLDER);
     }
 
     /*================================*/
