@@ -63,4 +63,15 @@ sample5.wav = 44100Hz / 24bit
 - Trim detected bleeding loops
 - Import custom folder path
 - Have better code structure (?)
-- Include error printing (Those which are commented)
+- Make error handling more pro (stderr, actual return values)
+- Automated tests for future (?)
+- Have command arguments (?)
+- Have magic numbers & constants as enum (?)
+
+## What I learned !
+
+- Header files and a make file
+- Structs and standards for a lot of things, wav files have 3 chunks
+- Binary file reading and parsing (Not just CSV)
+- Not to overcomplicate and overmodulorize code (Like I kinda did)
+- Comments as much as this isn't normal (But it's to help the teacher and future me)

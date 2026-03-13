@@ -27,6 +27,6 @@
 #define DEFAULT_SAMPLES_FOLDER "samples"
 
 // WAV file format constants:
-#define FMT_CHUNK_DATA_SIZE 16
+#define FMT_CHUNK_DATA_SIZE 16 // Size of standard PCM format chunk data (after chunk ID and size)
 
 #endif
