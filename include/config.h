@@ -6,7 +6,7 @@
 typedef struct {
     int sample_rate;
     int bit_depth;
-    char samples_folder[256];
+    char samples_folder[MAX_FOLDER_PATH_LENGTH];
 } Config;
 
 int load_config(const char *filename, Config *config);
