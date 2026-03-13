@@ -10,14 +10,35 @@ A command-line tool for validating audio sample files against technical specific
 
 ## Building
 
-```bash
+### Linux/WSL:
+```
+bash
+mkdir build
+cd build
+cmake ..
 make
+```
+
+### Windows (MinGW):
+```
+bash
+mkdir build
+cd build
+cmake .. -G "MinGW Makefiles"
+mingw32-make
 ```
 
 ## Usage
 
-```bash
-./slam
+### Linux/WSL:
+```
+bash
+./build/slam
+```
+### Windows:
+```
+bash
+build\slam.exe
 ```
 
 Commands:
@@ -64,10 +85,9 @@ sample5.wav = 44100Hz / 24bit
 - Import custom folder path
 - Have command arguments (?) e.g ```normalize (folder)```
 
-
-
 ## Possible improvements
 
+- Compile for MacOS using github actions so Aaro can use it for work
 - Have better code structure:
 - - No hardcoded strings for commands (if/else)
 - Make error handling more pro (actual return values)

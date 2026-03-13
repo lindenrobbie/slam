@@ -4,6 +4,9 @@ slam.exe
 *.o
 *.out
 
+#Build directory
+build/
+
 # Editor files
 *.swp
 *.swo
@@ -16,4 +19,3 @@ slam.exe
 Thumbs.db
 
 # Test files (optional)
-test_samples/
