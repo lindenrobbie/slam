@@ -1,3 +1,6 @@
+#ifndef WINAPI_FAMILY_PARTITION
+#define WINAPI_FAMILY_PARTITION(x) 1
+#endif
 /*
  * Dirent interface for Microsoft Visual Studio
  *
