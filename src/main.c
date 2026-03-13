@@ -56,7 +56,7 @@ int main()
     // Error 3.1 main.c: Config file not found, using defaults
     if (load_config("slam.conf", &config) != 0)
     {
-        printf("Warning: Could not load slam.conf, using defaults.\n\n");
+        print_warning("main.c", "Warning 3.1: Could not load slam.conf, using defaults");
         config.sample_rate = DEFAULT_SAMPLE_RATE;
         config.bit_depth = DEFAULT_BIT_DEPTH;
         strcpy(config.samples_folder, DEFAULT_SAMPLES_FOLDER);
@@ -75,11 +75,10 @@ int main()
         // Error 3.2 main.c: Command too long (buffer overflow protection)
         if (strchr(command, '\n') == NULL)
         {
-            printf("Error: Command too long\n\n");
+            print_error("main.c", "Error 3.2: Command too long");
 
             int c;
             while ((c = getchar()) != '\n' && c != EOF);
-
             continue;
         }
 

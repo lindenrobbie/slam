@@ -63,10 +63,11 @@ sample5.wav = 44100Hz / 24bit
 - Trim detected bleeding loops
 - Import custom folder path
 - Have better code structure (?)
-- Make error handling more pro (stderr, actual return values)
+- Make error handling more pro (stderr, actual return values) <- Done
 - Automated tests for future (?)
 - Have command arguments (?)
 - Have magic numbers & constants as enum (?)
+- Add debug level, make print processes (?) And error handle them if they fail (?)
 
 ## What I learned !
 
@@ -75,3 +76,4 @@ sample5.wav = 44100Hz / 24bit
 - Binary file reading and parsing (Not just CSV)
 - Not to overcomplicate and overmodulorize code (Like I kinda did)
 - Comments as much as this isn't normal (But it's to help the teacher and future me)
+- Compiling for windows sucks

@@ -2,6 +2,7 @@
 #include <string.h>
 #include "../include/config.h"
 #include "../include/constants.h"
+#include "../include/utils.h"
 
 //===============================================//
 //                                               //
@@ -62,8 +63,10 @@ int validate_config(Config *config)
     // Error 2.1 config.c: Sample rate out of reasonable range
     if (config->sample_rate < MIN_SAMPLE_RATE || config->sample_rate > MAX_SAMPLE_RATE)
     {
-        printf("Warning: Invalid sample rate %d Hz, using default %d Hz\n",
-               config->sample_rate, DEFAULT_SAMPLE_RATE);
+        char msg[MAX_ERROR_MSG_LENGTH + MAX_FOLDER_PATH_LENGTH];
+        snprintf(msg, sizeof(msg), "Warning 2.1: Invalid sample rate %d Hz, using default %d Hz",
+                config->sample_rate, DEFAULT_SAMPLE_RATE);
+        print_warning("config.c", msg);
         config->sample_rate = DEFAULT_SAMPLE_RATE;
         is_valid = 0;
     }
@@ -75,8 +78,10 @@ int validate_config(Config *config)
     // Error 2.2 config.c: Bit depth not 16, 24, or 32
     if (config->bit_depth != VALID_BIT_DEPTH_1 && config->bit_depth != VALID_BIT_DEPTH_2 && config->bit_depth != VALID_BIT_DEPTH_3)
     {
-        printf("Warning: Invalid bit depth %d bit, using default %d bit\n",
-               config->bit_depth, DEFAULT_BIT_DEPTH);
+        char msg[MAX_ERROR_MSG_LENGTH + MAX_FOLDER_PATH_LENGTH];
+        snprintf(msg, sizeof(msg), "Warning 2.2: Invalid bit depth %d bit, using default %d bit",
+                config->bit_depth, DEFAULT_BIT_DEPTH);
+        print_warning("config.c", msg);
         config->bit_depth = DEFAULT_BIT_DEPTH;
         is_valid = 0;
     }
@@ -88,8 +93,10 @@ int validate_config(Config *config)
     // Error 2.3 config.c: Samples folder path is empty
     if (strlen(config->samples_folder) == 0)
     {
-        printf("Warning: Empty samples folder, using default '%s'\n",
-               DEFAULT_SAMPLES_FOLDER);
+        char msg[MAX_ERROR_MSG_LENGTH + MAX_FOLDER_PATH_LENGTH];
+        snprintf(msg, sizeof(msg), "Warning 2.3: Empty samples folder, using default '%s'",
+                DEFAULT_SAMPLES_FOLDER);
+        print_warning("config.c", msg);
         strcpy(config->samples_folder, DEFAULT_SAMPLES_FOLDER);
         is_valid = 0;
     }
@@ -158,5 +165,5 @@ void print_config(const Config *config)
     printf("\nConfiguration:\n\n");
     printf("Sample Rate: %d Hz\n", config->sample_rate);
     printf("Bit Depth: %d bit\n", config->bit_depth);
-    printf("Samples Folder: %s\n\n", config->samples_folder);
+    printf("Folder: %s\n\n", config->samples_folder);
 }

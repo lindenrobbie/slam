@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include "../include/wav_reader.h"
 #include "../include/constants.h"
+#include "../include/utils.h"
 
 int read_wav_info(const char *filename, WavInfo *info)
 {   
@@ -17,6 +18,7 @@ int read_wav_info(const char *filename, WavInfo *info)
     // Error 1.1 wav_reader.c: File doesn't exist or can't be opened
     if (wav_file == NULL)
     {
+        print_error("wav_reader.c", "Error 1.1: File doesn't exist or can't be opened");
         return -1;
     }
 
@@ -29,12 +31,14 @@ int read_wav_info(const char *filename, WavInfo *info)
     // Error 2.1 wav_reader.c: File too short or corrupted (can't read header)
     if (fread(&riff_header, sizeof(RiffHeader), 1, wav_file) != 1)
     {
+        print_error("wav_reader.c", "Error 2.1: File too short or corrupted (can't read header)");
         fclose(wav_file);
         return -1;
     }
     // Error 2.2 wav_reader.c:  Not a valid WAV file (missing "RIFF" or "WAVE")
     if (strncmp(riff_header.riff, "RIFF", 4) != 0 || strncmp(riff_header.wave, "WAVE", 4) != 0)
     {
+        print_error("wav_reader.c", "Error 2.2: Not a valid WAV file (missing 'RIFF' or 'WAVE')");
         fclose(wav_file);
         return -1;
     }
@@ -54,6 +58,7 @@ int read_wav_info(const char *filename, WavInfo *info)
         // Error 3.1 wav_reader.c: Can't read chunk ID (file corrupted)
         if (fread(chunk_id, 4, 1, wav_file) != 1)
         {
+            print_error("wav_reader.c", "Error 3.1: Can't read chunk ID (file corrupted)");
             fclose(wav_file);
             return -1;
         }
@@ -61,6 +66,7 @@ int read_wav_info(const char *filename, WavInfo *info)
         // Error 3.2 wav_reader.c: Can't read chunk size (file corrupted)
         if (fread(&chunk_size, 4, 1, wav_file) != 1)
         {
+            print_error("wav_reader.c", "Error 3.2: Can't read chunk size (file corrupted)");
             fclose(wav_file);
             return -1;
         }
@@ -73,6 +79,7 @@ int read_wav_info(const char *filename, WavInfo *info)
             // Error 3.3 wav_reader.c: Can't read format data (file corrupted)
             if (fread(&fmt_chunk.audio_format, FMT_CHUNK_DATA_SIZE, 1, wav_file) != 1)
             {
+                print_error("wav_reader.c", "Error 3.3: Can't read format data (file corrupted)");
                 fclose(wav_file);
                 return -1;
             }
@@ -104,6 +111,7 @@ int read_wav_info(const char *filename, WavInfo *info)
         // Error 4.1 wav_reader.c: Can't read chunk ID (file corrupted)
         if (fread(chunk_id, 4, 1, wav_file) != 1)
         {
+            print_error("wav_reader.c", "Error 4.1: Can't read chunk ID (file corrupted)");
             fclose(wav_file);
             return -1;
         }
@@ -111,6 +119,7 @@ int read_wav_info(const char *filename, WavInfo *info)
         // Error 4.2 wav_reader.c: Can't read chunk size (file corrupted)
         if (fread(&chunk_size, 4, 1, wav_file) != 1)
         {
+            print_error("wav_reader.c", "Error 4.2: Can't read chunk size (file corrupted)");
             fclose(wav_file);
             return -1;
         }

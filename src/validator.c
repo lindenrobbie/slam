@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "../include/validator.h"
 #include "../include/wav_reader.h"
+#include "../include/utils.h"
 
 // This is to compile for windows, I am using Linux in WSL
 #ifdef _WIN32
@@ -27,6 +28,7 @@ ValidationResult validate_sample(const char *filename, const Config *config)
     /*====================*/
     /*   1.1. Open file   */
     /*====================*/
+
     WavInfo wav_info;
     int read_status = read_wav_info(filename, &wav_info);
 
@@ -235,7 +237,9 @@ void analyze_samples_folder(const Config *config)
     // Error 3.1 validator.c: Folder doesn't exist or can't be opened
     if (dir == NULL)
     {
-        printf("Error: Could not open %s folder\n\n", config->samples_folder);
+        char msg[MAX_ERROR_MSG_LENGTH + MAX_FOLDER_PATH_LENGTH];
+        snprintf(msg, sizeof(msg), "Error 3.1: Could not open folder '%s'.", config->samples_folder);
+        print_error("validator.c", msg);
         return;
     }
 
@@ -262,7 +266,7 @@ void analyze_samples_folder(const Config *config)
     // Error 3.2 validator.c: Memory allocation failure
     if (results == NULL)
     {
-        printf("Error: Memory allocation failed\n\n");
+        print_error("validator.c", "Error 3.2: Memory allocation failed");
         return;
     }
 
