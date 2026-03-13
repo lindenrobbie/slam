@@ -9,8 +9,10 @@
 //Input limits:
 #define MAX_COMMAND_LENGTH 50
 #define MAX_PATH_LENGTH 512
+#define MAX_FOLDER_PATH_LENGTH 256
 #define MAX_CONFIG_LINE_LENGTH 256
 #define MAX_ERROR_MSG_LENGTH 256
+#define MAX_FORMAT_STRING_LENGTH 20
 
 //Colors to make CLI less insufferable to read:
 #define COLOR_RESET   "\033[0m"
@@ -22,6 +24,7 @@
 //Default config values:
 #define DEFAULT_SAMPLE_RATE 44100
 #define DEFAULT_BIT_DEPTH 24
+#define DEFAULT_SAMPLES_FOLDER "samples"
 
 // WAV file format constants:
 #define FMT_CHUNK_DATA_SIZE 16

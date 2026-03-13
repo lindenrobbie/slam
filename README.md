@@ -63,3 +63,4 @@ sample5.wav = 44100Hz / 24bit
 - Trim detected bleeding loops
 - Import custom folder path
 - Have better code structure (?)
+- Include error printing (Those which are commented)
