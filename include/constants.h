@@ -28,5 +28,10 @@
 
 // WAV file format constants:
 #define FMT_CHUNK_DATA_SIZE 16 // Size of standard PCM format chunk data (after chunk ID and size)
+#define MIN_SAMPLE_RATE 8000      // Minimum reasonable sample rate (8 kHz)
+#define MAX_SAMPLE_RATE 192000    // Maximum reasonable sample rate (192 kHz)
+#define VALID_BIT_DEPTH_1 16      // Standard bit depth option
+#define VALID_BIT_DEPTH_2 24      // Standard bit depth option
+#define VALID_BIT_DEPTH_3 32      // Standard bit depth option
 
 #endif

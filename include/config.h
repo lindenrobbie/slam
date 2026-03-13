@@ -10,6 +10,7 @@ typedef struct {
 } Config;
 
 int load_config(const char *filename, Config *config);
+int validate_config(Config *config);
 void print_config(const Config *config);
 
 #endif

@@ -30,34 +30,88 @@ void parse_config_line(char *line, Config *config)
     {
         sscanf(value, "%d", &config->sample_rate);
     }
+
     // Process 1.4: Check for "BIT_DEPTH"
     else if (strcmp(key, "BIT_DEPTH") == 0)
     {
         sscanf(value, "%d", &config->bit_depth);
     }
+
     // Process 1.5: Check for "SAMPLES_FOLDER"
-    else if (strncmp(line, "SAMPLES_FOLDER=", 15) == 0)
+    else if (strcmp(key, "SAMPLES_FOLDER") == 0)
     {
-    strcpy(config->samples_folder, line + 15);
+        strcpy(config->samples_folder, value);
     }
 
 }
 
 //===============================================//
 //                                               //
-//        2. Load config from file               //
+//        2. Validate config values              //
+//                                               //
+//===============================================//
+
+int validate_config(Config *config)
+{
+    int is_valid = 1;
+
+    /*================================*/
+    /*   2.1 Sample rate check        */
+    /*================================*/
+
+    // Error 2.1 config.c: Sample rate out of reasonable range
+    if (config->sample_rate < MIN_SAMPLE_RATE || config->sample_rate > MAX_SAMPLE_RATE)
+    {
+        printf("Warning: Invalid sample rate %d Hz, using default %d Hz\n",
+               config->sample_rate, DEFAULT_SAMPLE_RATE);
+        config->sample_rate = DEFAULT_SAMPLE_RATE;
+        is_valid = 0;
+    }
+
+    /*================================*/
+    /*     2.2 Bit depth check        */
+    /*================================*/
+
+    // Error 2.2 config.c: Bit depth not 16, 24, or 32
+    if (config->bit_depth != VALID_BIT_DEPTH_1 && config->bit_depth != VALID_BIT_DEPTH_2 && config->bit_depth != VALID_BIT_DEPTH_3)
+    {
+        printf("Warning: Invalid bit depth %d bit, using default %d bit\n",
+               config->bit_depth, DEFAULT_BIT_DEPTH);
+        config->bit_depth = DEFAULT_BIT_DEPTH;
+        is_valid = 0;
+    }
+
+    /*================================*/
+    /*   2.3 Folder path check        */
+    /*================================*/
+
+    // Error 2.3 config.c: Samples folder path is empty
+    if (strlen(config->samples_folder) == 0)
+    {
+        printf("Warning: Empty samples folder, using default '%s'\n",
+               DEFAULT_SAMPLES_FOLDER);
+        strcpy(config->samples_folder, DEFAULT_SAMPLES_FOLDER);
+        is_valid = 0;
+    }
+
+    return is_valid;
+}
+
+//===============================================//
+//                                               //
+//        3. Load config from file               //
 //                                               //
 //===============================================//
 
 int load_config(const char *filename, Config *config)
 {
     /*================================*/
-    /*      2.1 Open config file      */
+    /*      3.1 Open config file      */
     /*================================*/
 
     FILE *config_file = fopen(filename, "r");
 
-    // Error 2.1 config.c: File doesn't exist or can't be opened
+    // Error 3.1 config.c: File doesn't exist or can't be opened
     if (config_file == NULL)
     {
         return -1;
@@ -65,40 +119,44 @@ int load_config(const char *filename, Config *config)
 
 
     /*================================*/
-    /*  2.2 Read and parse each line  */
+    /*  3.2 Read and parse each line  */
     /*================================*/
 
     char line[MAX_CONFIG_LINE_LENGTH];
 
-    // Process 2.2.1: Read file line by line
+    // Process 3.2.1: Read file line by line
     while (fgets(line, sizeof(line), config_file) != NULL)
     {
-        // Process 2.2.2: Remove newline character
+        // Process 3.2.2: Remove newline character
         line[strcspn(line, "\n")] = '\0';
 
-        // Process 2.2.3: Skip empty lines
+        // Process 3.2.3: Skip empty lines
         if (strlen(line) == 0)
         {
             continue;
         }
 
-        // Process 2.2.4: Parse the line
+        // Process 3.2.4: Parse the line
         parse_config_line(line, config);
 
     }
 
     fclose(config_file);
+
+    // Process 3.2.4: Validate loaded config values
+    validate_config(config);
+
     return 0;
 }
 
 //===============================================//
-//      3. Print format for config print         //
+//      4. Print format for config print         //
 //===============================================//
 
 void print_config(const Config *config)
 {
     printf("\nConfiguration:\n\n");
     printf("Sample Rate: %d Hz\n", config->sample_rate);
-    printf("Bit Depth: %d bit\n\n", config->bit_depth);
+    printf("Bit Depth: %d bit\n", config->bit_depth);
     printf("Samples Folder: %s\n\n", config->samples_folder);
 }
