@@ -36,9 +36,10 @@ bash
 ./build/slam
 ```
 ### Windows:
+Run from project root:
 ```
 bash
-build\slam.exe
+.\build\slam.exe
 ```
 
 Commands:
