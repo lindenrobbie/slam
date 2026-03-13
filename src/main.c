@@ -91,6 +91,13 @@ int main()
             continue;
         }
 
+        // Process 3.2.3: Validate command characters
+        if (!is_valid_command(command))
+        {
+            print_error("main.c", "Error 3.2.3: Invalid characters in command");
+            continue;
+        }
+
         /*================================*/
         /*     3.3 Process commands       */
         /*================================*/
